@@ -658,6 +658,7 @@ class BaseShape(object):
 		self.m_style = "" #样式
 		self.m_text = "" #显示的文字
 		self.m_value = 0 #显示文字的值
+		self.m_showHideDatas = [] #控制显示隐藏的数据
 
 #画线工具结构
 class FCPlot(object):
@@ -5303,16 +5304,17 @@ def drawChartCrossLine(chart, paint, clipRect):
 			for i in range(0, len(chart.m_shapes)):
 				shape = chart.m_shapes[i]
 				if(shape.m_divIndex == 1):
-					if(shape.m_type == "bar"  and shape.m_style == "2color"):
-						drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
-						drawColors.append(shape.m_color2)
-					else:
-						if(shape.m_type != "text"):
+					if(len(shape.m_title) > 0):
+						if(shape.m_type == "bar"  and shape.m_style == "2color"):
 							drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
-							drawColors.append(shape.m_color)
-							if(len(shape.m_datas2) > 0):
-								drawTitles.append(shape.m_title2 + " " + toFixed(shape.m_datas2[crossLineIndex], chart.m_indDigit2))
-								drawColors.append(shape.m_color2)
+							drawColors.append(shape.m_color2)
+						else:
+							if(shape.m_type != "text"):
+								drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
+								drawColors.append(shape.m_color)
+								if(len(shape.m_datas2) > 0):
+									drawTitles.append(shape.m_title2 + " " + toFixed(shape.m_datas2[crossLineIndex], chart.m_indDigit2))
+									drawColors.append(shape.m_color2)
 						
 					
 		iLeft = chart.m_leftVScaleWidth + 5
@@ -5330,16 +5332,17 @@ def drawChartCrossLine(chart, paint, clipRect):
 			for i in range(0, len(chart.m_shapes)):
 				shape = chart.m_shapes[i]
 				if(shape.m_divIndex == 0):
-					if(shape.m_type == "bar"  and shape.m_style == "2color"):
-						drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
-						drawColors.append(shape.m_color2)
-					else:
-						if(shape.m_type != "text"):
+					if(len(shape.m_title) > 0):
+						if(shape.m_type == "bar"  and shape.m_style == "2color"):
 							drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
-							drawColors.append(shape.m_color)
-							if(len(shape.m_datas2) > 0):
-								drawTitles.append(shape.m_title2 + " " + toFixed(shape.m_datas2[crossLineIndex], chart.m_indDigit2))
-								drawColors.append(shape.m_color2)
+							drawColors.append(shape.m_color2)
+						else:
+							if(shape.m_type != "text"):
+								drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
+								drawColors.append(shape.m_color)
+								if(len(shape.m_datas2) > 0):
+									drawTitles.append(shape.m_title2 + " " + toFixed(shape.m_datas2[crossLineIndex], chart.m_indDigit2))
+									drawColors.append(shape.m_color2)
 		for i in range(0,len(drawTitles)):
 			tSize = paint.textSize(drawTitles[i], chart.m_font)
 			paint.drawText(drawTitles[i], drawColors[i], chart.m_font, iLeft, 5)
@@ -5371,16 +5374,17 @@ def drawChartCrossLine(chart, paint, clipRect):
 			for i in range(0, len(chart.m_shapes)):
 				shape = chart.m_shapes[i]
 				if(shape.m_divIndex == 0):
-					if(shape.m_type == "bar"  and shape.m_style == "2color"):
-						drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
-						drawColors.append(shape.m_color2)
-					else:
-						if(shape.m_type != "text"):
+					if(len(shape.m_title) > 0):
+						if(shape.m_type == "bar" and shape.m_style == "2color"):
 							drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
-							drawColors.append(shape.m_color)
-							if(len(shape.m_datas2) > 0):
-								drawTitles.append(shape.m_title2 + " " + toFixed(shape.m_datas2[crossLineIndex], chart.m_indDigit2))
-								drawColors.append(shape.m_color2)
+							drawColors.append(shape.m_color2)
+						else:
+							if(shape.m_type != "text"):
+								drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
+								drawColors.append(shape.m_color)
+								if(len(shape.m_datas2) > 0):
+									drawTitles.append(shape.m_title2 + " " + toFixed(shape.m_datas2[crossLineIndex], chart.m_indDigit2))
+									drawColors.append(shape.m_color2)
 		iLeft = chart.m_leftVScaleWidth + 5
 		for i in range(0, len(drawTitles)):
 			tSize = paint.textSize(drawTitles[i], chart.m_font)
@@ -5447,16 +5451,17 @@ def drawChartCrossLine(chart, paint, clipRect):
 			for i in range(0, len(chart.m_shapes)):
 				shape = chart.m_shapes[i]
 				if(shape.m_divIndex == 2):
-					if(shape.m_type == "bar"  and shape.m_style == "2color"):
-						drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
-						drawColors.append(shape.m_color2)
-					else:
-						if(shape.m_type != "text"):
+					if(len(shape.m_title) > 0):
+						if(shape.m_type == "bar"  and shape.m_style == "2color"):
 							drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
-							drawColors.append(shape.m_color)
-							if(len(shape.m_datas2) > 0):
-								drawTitles.append(shape.m_title2 + " " + toFixed(shape.m_datas2[crossLineIndex], chart.m_indDigit2))
-								drawColors.append(shape.m_color2)
+							drawColors.append(shape.m_color2)
+						else:
+							if(shape.m_type != "text"):
+								drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
+								drawColors.append(shape.m_color)
+								if(len(shape.m_datas2) > 0):
+									drawTitles.append(shape.m_title2 + " " + toFixed(shape.m_datas2[crossLineIndex], chart.m_indDigit2))
+									drawColors.append(shape.m_color2)
 		iLeft = chart.m_leftVScaleWidth + 5
 		for i in range(0,len(drawTitles)):
 			tSize = paint.textSize(drawTitles[i], chart.m_font)
@@ -5469,16 +5474,17 @@ def drawChartCrossLine(chart, paint, clipRect):
 			for i in range(0, len(chart.m_shapes)):
 				shape = chart.m_shapes[i]
 				if(shape.m_divIndex == 3):
-					if(shape.m_type == "bar"  and shape.m_style == "2color"):
-						drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
-						drawColors.append(shape.m_color2)
-					else:
-						if(shape.m_type != "text"):
+					if(len(shape.m_title) > 0):
+						if(shape.m_type == "bar"  and shape.m_style == "2color"):
 							drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
-							drawColors.append(shape.m_color)
-							if(len(shape.m_datas2) > 0):
-								drawTitles.append(shape.m_title2 + " " + toFixed(shape.m_datas2[crossLineIndex], chart.m_indDigit2))
-								drawColors.append(shape.m_color2)
+							drawColors.append(shape.m_color2)
+						else:
+							if(shape.m_type != "text"):
+								drawTitles.append(shape.m_title + " " + toFixed(shape.m_datas[crossLineIndex], chart.m_indDigit2))
+								drawColors.append(shape.m_color)
+								if(len(shape.m_datas2) > 0):
+									drawTitles.append(shape.m_title2 + " " + toFixed(shape.m_datas2[crossLineIndex], chart.m_indDigit2))
+									drawColors.append(shape.m_color2)
 			if(len(drawTitles) > 0):
 				iLeft = chart.m_leftVScaleWidth + 5
 				for i in range(0,len(drawTitles)):
@@ -5634,44 +5640,60 @@ def drawChartStock(chart, paint, clipRect):
 						paint.drawText(tag, chart.m_textColor, chart.m_font, x - tSize.cx / 2, lowY + 2)
 						hasMinTag = TRUE
 		if (isTrend == FALSE):
+			newPaint = FCPaint()
+			newPaint.m_drawHDC = paint.m_innerHDC
+			newPaint.m_memBM = paint.m_innerBM
+			newPaint.m_scaleFactorX = paint.m_scaleFactorX
+			newPaint.m_scaleFactorY = paint.m_scaleFactorY
+			divHeight = getCandleDivHeight(chart)
+			cRect = FCRect(chart.m_leftVScaleWidth, 0, chart.m_size.cx, divHeight)
+			newPaint.beginClip(cRect)
 			if (chart.m_mainIndicator == "BOLL"):
 				if(chart.m_selectShape == chart.m_mainIndicator and chart.m_selectShapeEx == "MID"):
-					drawChartLines(chart, paint, clipRect, 0, chart.m_boll_mid, m_indicatorColors[0], TRUE)
+					drawChartLines(chart, newPaint, clipRect, 0, chart.m_boll_mid, m_indicatorColors[0], TRUE)
 				else:
-					drawChartLines(chart, paint, clipRect, 0, chart.m_boll_mid, m_indicatorColors[0], FALSE)
+					drawChartLines(chart, newPaint, clipRect, 0, chart.m_boll_mid, m_indicatorColors[0], FALSE)
 				if(chart.m_selectShape == chart.m_mainIndicator and chart.m_selectShapeEx == "UP"):
-					drawChartLines(chart, paint, clipRect, 0, chart.m_boll_up, m_indicatorColors[1], TRUE)
+					drawChartLines(chart, newPaint, clipRect, 0, chart.m_boll_up, m_indicatorColors[1], TRUE)
 				else:
-					drawChartLines(chart, paint, clipRect, 0, chart.m_boll_up, m_indicatorColors[1], FALSE)
+					drawChartLines(chart, newPaint, clipRect, 0, chart.m_boll_up, m_indicatorColors[1], FALSE)
 				if(chart.m_selectShape == chart.m_mainIndicator and chart.m_selectShapeEx == "DOWN"):
-					drawChartLines(chart, paint, clipRect, 0, chart.m_boll_down, m_indicatorColors[2], TRUE)
+					drawChartLines(chart, newPaint, clipRect, 0, chart.m_boll_down, m_indicatorColors[2], TRUE)
 				else:
-					drawChartLines(chart, paint, clipRect, 0, chart.m_boll_down, m_indicatorColors[2], FALSE)
+					drawChartLines(chart, newPaint, clipRect, 0, chart.m_boll_down, m_indicatorColors[2], FALSE)
 			elif(chart.m_mainIndicator == "MA"):
 				if(chart.m_selectShape == chart.m_mainIndicator and chart.m_selectShapeEx == "5"):
-					drawChartLines(chart, paint, clipRect, 0, chart.m_ma5, m_indicatorColors[0], TRUE)
+					drawChartLines(chart, newPaint, clipRect, 0, chart.m_ma5, m_indicatorColors[0], TRUE)
 				else:
-					drawChartLines(chart, paint, clipRect, 0, chart.m_ma5, m_indicatorColors[0], FALSE)
+					drawChartLines(chart, newPaint, clipRect, 0, chart.m_ma5, m_indicatorColors[0], FALSE)
 				if(chart.m_selectShape == chart.m_mainIndicator and chart.m_selectShapeEx == "10"):
-					drawChartLines(chart, paint, clipRect, 0, chart.m_ma10, m_indicatorColors[1], TRUE)
+					drawChartLines(chart, newPaint, clipRect, 0, chart.m_ma10, m_indicatorColors[1], TRUE)
 				else:
-					drawChartLines(chart, paint, clipRect, 0, chart.m_ma10, m_indicatorColors[1], FALSE)
+					drawChartLines(chart, newPaint, clipRect, 0, chart.m_ma10, m_indicatorColors[1], FALSE)
 				if(chart.m_selectShape == chart.m_mainIndicator and chart.m_selectShapeEx == "20"):
-					drawChartLines(chart, paint, clipRect, 0, chart.m_ma20, m_indicatorColors[2], TRUE)
+					drawChartLines(chart, newPaint, clipRect, 0, chart.m_ma20, m_indicatorColors[2], TRUE)
 				else:
-					drawChartLines(chart, paint, clipRect, 0, chart.m_ma20, m_indicatorColors[2], FALSE)
+					drawChartLines(chart, newPaint, clipRect, 0, chart.m_ma20, m_indicatorColors[2], FALSE)
 				if(chart.m_selectShape == chart.m_mainIndicator and chart.m_selectShapeEx == "30"):
-					drawChartLines(chart, paint, clipRect, 0, chart.m_ma30, m_indicatorColors[3], TRUE)
+					drawChartLines(chart, newPaint, clipRect, 0, chart.m_ma30, m_indicatorColors[3], TRUE)
 				else:
-					drawChartLines(chart, paint, clipRect, 0, chart.m_ma30, m_indicatorColors[3], FALSE)
+					drawChartLines(chart, newPaint, clipRect, 0, chart.m_ma30, m_indicatorColors[3], FALSE)
 				if(chart.m_selectShape == chart.m_mainIndicator and chart.m_selectShapeEx == "120"):
-					drawChartLines(chart, paint, clipRect, 0, chart.m_ma120, m_indicatorColors[4], TRUE)
+					drawChartLines(chart, newPaint, clipRect, 0, chart.m_ma120, m_indicatorColors[4], TRUE)
 				else:
-					drawChartLines(chart, paint, clipRect, 0, chart.m_ma120, m_indicatorColors[4], FALSE)
+					drawChartLines(chart, newPaint, clipRect, 0, chart.m_ma120, m_indicatorColors[4], FALSE)
 				if(chart.m_selectShape == chart.m_mainIndicator and chart.m_selectShapeEx == "250"):
-					drawChartLines(chart, paint, clipRect, 0, chart.m_ma250, m_indicatorColors[5], TRUE)
+					drawChartLines(chart, newPaint, clipRect, 0, chart.m_ma250, m_indicatorColors[5], TRUE)
 				else:
-					drawChartLines(chart, paint, clipRect, 0, chart.m_ma250, m_indicatorColors[5], FALSE)
+					drawChartLines(chart, newPaint, clipRect, 0, chart.m_ma250, m_indicatorColors[5], FALSE)
+			rect = FCRect(0, 0, cRect.right - cRect.left, cRect.bottom - cRect.top)
+			win32gui.StretchBlt(newPaint.m_drawHDC, int(cRect.left), int(cRect.top), int(cRect.right - cRect.left), int(cRect.bottom - cRect.top), newPaint.m_innerHDC, int(cRect.left - rect.left), int(cRect.top - rect.top), int(cRect.right - cRect.left), int(cRect.bottom - cRect.top), SRCPAINT)
+			if(newPaint.m_innerHDC != None):
+				win32gui.DeleteObject(newPaint.m_innerHDC)
+				newPaint.m_innerHDC = None
+			if(newPaint.m_innerBM != None):
+				win32gui.DeleteObject(newPaint.m_innerBM)
+				newPaint.m_innerBM = None
 		if (indHeight > 0):
 			if (chart.m_showIndicator == "MACD"):
 				zeroY = getChartY(chart, 2, 0)
@@ -5789,6 +5811,8 @@ def drawChartStock(chart, paint, clipRect):
 			shape = chart.m_shapes[i]
 			if(shape.m_type == "bar"):
 				for j in range(chart.m_firstVisibleIndex,lastValidIndex + 1):
+					if(len(shape.m_showHideDatas) > j and str(shape.m_showHideDatas[j]) == "0"):
+						continue
 					x = getChartX(chart, j)
 					y1 = getChartY(chart, shape.m_divIndex, shape.m_datas[j])
 					if(shape.m_style != "2color"):
