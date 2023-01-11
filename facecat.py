@@ -799,6 +799,7 @@ class FCChart(FCView):
 		self.m_ma120 = []
 		self.m_ma250 = []
 		self.m_shapes = [] #扩展图形
+		self.m_hScaleFormat = "" #X轴的格式化字符，例如%Y-%m-%d %H:%M:%S
 	pass
 
 m_indicatorColors = [] #指标的颜色
@@ -5294,6 +5295,9 @@ def drawChartScale(chart, paint, clipRect):
 					xText = time.strftime("%H:%M:%S", timeArray)
 				elif(chart.m_cycle == "tick"):
 					xText = str(i + 1)
+				if (len(chart.m_hScaleFormat) > 0):
+					timeArray = time.localtime(chart.m_data[i].m_date)
+					xText = time.strftime(chart.m_hScaleFormat, timeArray)
 				tSize = paint.textSize(xText, chart.m_font)
 				x = getChartX(chart, i)
 				dx = x - tSize.cx / 2
@@ -5556,6 +5560,9 @@ def drawChartCrossLine(chart, paint, clipRect):
 				xText = time.strftime("%H:%M:%S", timeArray)
 			elif(chart.m_cycle == "tick"):
 				xText = str(chart.m_crossStopIndex + 1)
+			if (len(chart.m_hScaleFormat) > 0):
+				timeArray = time.localtime(chart.m_data[chart.m_crossStopIndex].m_date)
+				xText = time.strftime(chart.m_hScaleFormat, timeArray)
 			xSize = paint.textSize(xText, chart.m_font)
 			paint.fillRect(chart.m_crossTipColor, drawX - xSize.cx / 2 - 2, candleDivHeight + volDivHeight + indDivHeight, drawX + xSize.cx / 2 + 2, candleDivHeight + volDivHeight + indDivHeight + xSize.cy + 6)
 			paint.drawText(xText, chart.m_textColor, chart.m_font, drawX - xSize.cx / 2, candleDivHeight + volDivHeight + indDivHeight + 3)

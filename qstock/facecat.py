@@ -298,6 +298,27 @@ class FCPaint(object):
 		pyRect = (int((left + self.m_offsetX) * self.m_scaleFactorX), int((top + self.m_offsetY) * self.m_scaleFactorY), int((right + self.m_offsetX) * self.m_scaleFactorX), int((bottom + self.m_offsetY) * self.m_scaleFactorY))
 		win32gui.Ellipse(self.m_innerHDC, int((left + self.m_offsetX) * self.m_scaleFactorX), int((top + self.m_offsetY) * self.m_scaleFactorY), int((right + self.m_offsetX) * self.m_scaleFactorX), int((bottom + self.m_offsetY) * self.m_scaleFactorY))
 		win32gui.DeleteObject(brush)
+	#填充饼图
+	#color:颜色
+	#left:左侧坐标 
+	#top:上方坐标 
+	#right:右侧坐标 
+	#bottom:下方坐标
+	#startAngle:开始角度
+	#sweepAngle:持续角度
+	def fillPie(self, color, left, top, right, bottom, startAngle, sweepAngle):
+		brush = win32gui.CreateSolidBrush(toColor(color))
+		win32gui.SelectObject(self.m_innerHDC, brush)
+		oX = (left + (right - left) / 2)
+		oY = (top + (bottom - top) / 2)
+		rX = (right - left) / 2
+		rY = (bottom - top) / 2
+		x1 = oX + (rX) * math.cos(startAngle * 3.1415926 / 180)
+		y1 = oY + (rY) * math.sin(startAngle * 3.1415926 / 180)
+		x2 = oX + (rX) * math.cos((startAngle + sweepAngle) * 3.1415926 / 180)
+		y2 = oY + (rY) * math.sin((startAngle + sweepAngle) * 3.1415926 / 180)
+		win32gui.Pie(self.m_innerHDC, int((left + self.m_offsetX) * self.m_scaleFactorX), int((top + self.m_offsetY) * self.m_scaleFactorY), int((right + self.m_offsetX) * self.m_scaleFactorX), int((bottom + self.m_offsetY) * self.m_scaleFactorY), int((x1 + self.m_offsetX) * self.m_scaleFactorX), int((y1 + self.m_offsetY) * self.m_scaleFactorY), int((x2 + self.m_offsetX) * self.m_scaleFactorX), int((y2 + self.m_offsetY) * self.m_scaleFactorY))
+		win32gui.DeleteObject(brush)
 	#设置偏移量
 	#offsetX:横向偏移 
 	#offsetY:纵向偏移
@@ -778,6 +799,7 @@ class FCChart(FCView):
 		self.m_ma120 = []
 		self.m_ma250 = []
 		self.m_shapes = [] #扩展图形
+		self.m_hScaleFormat = "" #X轴的格式化字符，例如%Y-%m-%d %H:%M:%S
 	pass
 
 m_indicatorColors = [] #指标的颜色
@@ -5273,6 +5295,9 @@ def drawChartScale(chart, paint, clipRect):
 					xText = time.strftime("%H:%M:%S", timeArray)
 				elif(chart.m_cycle == "tick"):
 					xText = str(i + 1)
+				if (len(chart.m_hScaleFormat) > 0):
+					timeArray = time.localtime(chart.m_data[i].m_date)
+					xText = time.strftime(chart.m_hScaleFormat, timeArray)
 				tSize = paint.textSize(xText, chart.m_font)
 				x = getChartX(chart, i)
 				dx = x - tSize.cx / 2
@@ -5535,6 +5560,9 @@ def drawChartCrossLine(chart, paint, clipRect):
 				xText = time.strftime("%H:%M:%S", timeArray)
 			elif(chart.m_cycle == "tick"):
 				xText = str(chart.m_crossStopIndex + 1)
+			if (len(chart.m_hScaleFormat) > 0):
+				timeArray = time.localtime(chart.m_data[chart.m_crossStopIndex].m_date)
+				xText = time.strftime(chart.m_hScaleFormat, timeArray)
 			xSize = paint.textSize(xText, chart.m_font)
 			paint.fillRect(chart.m_crossTipColor, drawX - xSize.cx / 2 - 2, candleDivHeight + volDivHeight + indDivHeight, drawX + xSize.cx / 2 + 2, candleDivHeight + volDivHeight + indDivHeight + xSize.cy + 6)
 			paint.drawText(xText, chart.m_textColor, chart.m_font, drawX - xSize.cx / 2, candleDivHeight + volDivHeight + indDivHeight + 3)
@@ -6161,3 +6189,60 @@ def getHWndText(hwnd):
 	address, length = win32gui.PyGetBufferAddressAndLen(buf[:-1])
 	text = win32gui.PyGetString(address, length)
 	return text
+
+#单选按钮
+class FCPie(FCView):
+	def __init__(self):
+		super().__init__()
+		self.m_pieRadius = 70 #饼图半径
+		self.m_textRadius = TRUE #是否可见
+		self.m_startAngle = 0 #开始角度
+		self.m_items = [] #数据项
+		self.m_type = "pie" #类型
+	pass
+
+#饼图项
+class FCPieItem(object):
+	def __init__(self):
+		self.m_value = 0 #数值
+		self.m_text = "" #文字
+		self.m_color = "rgb(0,0,0)" #颜色
+
+#获取饼图的最大值
+#pie 饼图
+def getPieMaxValue(pie):
+	maxValue = 0
+	for i in range(0, len(pie.m_items)):
+		item = pie.m_items[i]
+		maxValue += item.m_value
+	return maxValue
+
+#绘图饼图
+#pie:饼图
+#paint:绘图对象
+#clipRect:裁剪区域
+def drawPie(pie, paint, clipRect):
+	width = pie.m_size.cx
+	height = pie.m_size.cy
+	oX = width / 2
+	oY = height / 2
+	eRect = FCRect(oX - pie.m_pieRadius, oY - pie.m_pieRadius, oX + pie.m_pieRadius, oY + pie.m_pieRadius)
+	maxValue = getPieMaxValue(pie)
+	if (maxValue > 0):
+		startAngle = pie.m_startAngle
+		for i in range(0, len(pie.m_items)):
+			item = pie.m_items[i]
+			sweepAngle = item.m_value / maxValue * 360
+			paint.fillPie(item.m_color, eRect.left, eRect.top, eRect.right, eRect.bottom, startAngle, sweepAngle)
+			x1 = oX + (pie.m_pieRadius) * math.cos((startAngle + sweepAngle / 2) * 3.1415926 / 180)
+			y1 = oY + (pie.m_pieRadius) * math.sin((startAngle + sweepAngle / 2) * 3.1415926 / 180)
+			x2 = oX + (pie.m_textRadius) * math.cos((startAngle + sweepAngle / 2) * 3.1415926 / 180)
+			y2 = oY + (pie.m_textRadius) * math.sin((startAngle + sweepAngle / 2) * 3.1415926 / 180)
+			itemText = str(item.m_value)
+			itemTextSize = paint.textSize(itemText, pie.m_font)
+			paint.drawLine(pie.m_textColor, 1, 0, x1, y1, x2, y2);
+			x3 = oX + (pie.m_textRadius + itemTextSize.cx / 2 + 5) * math.cos((startAngle + sweepAngle / 2) * 3.1415926 / 180)
+			y3 = oY + (pie.m_textRadius + itemTextSize.cy / 2 + 5) * math.sin((startAngle + sweepAngle / 2) * 3.1415926 / 180)
+			paint.drawText(itemText, pie.m_textColor, pie.m_font, x3 - itemTextSize.cx / 2, y3 - itemTextSize.cy / 2)
+			startAngle += sweepAngle
+	paint.drawEllipse(pie.m_borderColor, 1, 0, eRect.left, eRect.top, eRect.right, eRect.bottom)
