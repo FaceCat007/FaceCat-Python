@@ -54,6 +54,8 @@ def onViewPaint(view, paint, clipRect):
 	elif(view.m_type == "tree"):
 		drawDiv(view, paint, clipRect)
 		drawTree(view, paint, clipRect)
+	elif(view.m_type == "pie"):
+		drawPie(view, paint, clipRect)
 	elif(view.m_type == "label"):
 		if(view.m_textColor != "none"):
 			tSize = paint.textSize(view.m_text, view.m_font)
@@ -328,6 +330,7 @@ for i in range(0,4):
 		tabButton.m_backColor = "rgb(255,255,255)"
 		tabButton.m_borderColor = "rgb(150,150,150)"
 		tabButton.m_textColor = "rgb(0,0,0)"
+
 updateTabLayout(m_tabView);
 
 rect = win32gui.GetClientRect(hwnd)

@@ -111,6 +111,8 @@ def setAttribute(view, child):
 				view.m_src = value
 			elif(name == "backimage"):
 				view.m_backImage = value
+			elif(name == "allowdrag"):
+				view.m_allowDrag =  (value.lower() == "true")
     
 #读取Xml
 #paint 绘图对象
